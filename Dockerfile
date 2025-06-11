@@ -1,6 +1,7 @@
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 COPY . /app
 WORKDIR /app
+RUN mvn dependency:copy-dependencies -DoutputDirectory=target/lib
 RUN mvn package
 
 FROM eclipse-temurin:17-jre

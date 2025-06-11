@@ -35,7 +35,7 @@ public class AlwaysEncryptedSample {
 
         try (Connection conn = DriverManager.getConnection(connectionUrl, props)) {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM [YourTable] WHERE [EncryptedColumn] = ?");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM [Sales].Employees;");
             while (rs.next()) {
                 System.out.println("Row: " + rs.getString(1));
             }
