@@ -29,7 +29,7 @@ public class AlwaysEncryptedSample {
         //columnEncryptionSetting=Enabled;keyStoreAuthentication=AzureKeyVaultManagedIdentity;keyStorePrincipalId=<your-managed-identity-client-id>
         Properties props = new Properties();
         props.setProperty("columnEncryptionSetting", "Enabled");
-        props.setProperty("keyStoreAuthentication", "AzureKeyVaultManagedIdentity");
+        props.setProperty("keyStoreAuthentication", "KeyVaultManagedIdentity");
         props.setProperty("keyStorePrincipalId", System.getenv("AZURE_MANAGED_IDENTITY_CLIENT_ID")); 
         // Add more properties as needed
 
