@@ -37,7 +37,8 @@ public class AlwaysEncryptedSample {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM [Sales].Employees;");
             while (rs.next()) {
-                System.out.println("Row: " + rs.getString(1));
+                System.out.println("ID: " + rs.getString(1));
+                System.out.println("SSN" + rs.getString(2));
             }
         }
     }
