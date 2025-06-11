@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: always-encrypted-sample
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: always-encrypted-sample
+  template:
+    metadata:
+      labels:
+        app: always-encrypted-sample
+    spec:
+      serviceAccountName: aks-keyvault-sa # Ensure this service account is bound to a managed identity with Key Vault access
+      containers:
+        - name: always-encrypted-sample
+          image: <your-acr>.azurecr.io/always-encrypted-sample:latest
+          env:
+            - name: SQL_CONN_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: sql-conn-secret
+                  key: connection-string
+            - name: AZURE_MANAGED_IDENTITY_CLIENT_ID
+              value: <your-managed-identity-client-id>
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: azure-keyvault-provider
+---
+apiVersion: v1
+kind: SecretProviderClass
+metadata:
+  name: azure-keyvault-provider
+spec:
+  provider: azure
+  parameters:
+    usePodIdentity: "true" # or useManagedIdentity: "true" for workload identity
+    keyvaultName: <your-keyvault-name>
+    objects: |
+      array:
+        - | # Example: fetch a secret for the app
+          objectName: sql-conn-string
+          objectType: secret
+    tenantId: <your-tenant-id>
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sql-conn-secret
+stringData:
+  connection-string: "<your-sql-connection-string>"
