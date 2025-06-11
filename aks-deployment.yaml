@@ -15,7 +15,7 @@ spec:
       serviceAccountName: aks-keyvault-sa # Ensure this service account is bound to a managed identity with Key Vault access
       containers:
         - name: always-encrypted-sample
-          image: <your-acr>.azurecr.io/always-encrypted-sample:latest
+          image: kpantos/com.example.alwaysencrypted:v1
           env:
             - name: SQL_CONN_STRING
               valueFrom:
@@ -23,38 +23,20 @@ spec:
                   name: sql-conn-secret
                   key: connection-string
             - name: AZURE_MANAGED_IDENTITY_CLIENT_ID
-              value: <your-managed-identity-client-id>
-          volumeMounts:
-            - name: secrets-store-inline
-              mountPath: "/mnt/secrets-store"
-              readOnly: true
-      volumes:
-        - name: secrets-store-inline
-          csi:
-            driver: secrets-store.csi.k8s.io
-            readOnly: true
-            volumeAttributes:
-              secretProviderClass: azure-keyvault-provider
+              value: c79f5e7a-fefc-4e5e-98f6-3440bd2e9277
 ---
 apiVersion: v1
-kind: SecretProviderClass
+kind: ServiceAccount
 metadata:
-  name: azure-keyvault-provider
-spec:
-  provider: azure
-  parameters:
-    usePodIdentity: "true" # or useManagedIdentity: "true" for workload identity
-    keyvaultName: <your-keyvault-name>
-    objects: |
-      array:
-        - | # Example: fetch a secret for the app
-          objectName: sql-conn-string
-          objectType: secret
-    tenantId: <your-tenant-id>
+  name: aks-keyvault-sa
+  annotations:
+    azure.workload.identity/client-id: c79f5e7a-fefc-4e5e-98f6-3440bd2e9277 # Replace with your managed identity client ID
+    azure.workload.identity/tenant-id: f129bc3c-3fb2-4d3b-85c8-839e1a9bd9e2 # Replace with your Azure tenant ID
+    azure.workload.identity/service-account-token-expiration: "3600"
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: sql-conn-secret
 stringData:
-  connection-string: "<your-sql-connection-string>"
+  connection-string: "jdbc:sqlserver://UAPSQLServer;database=WideWorldImporters;user=sqltest@UAPSQLServer;password=StrongPassword123!;encrypt=true;"
