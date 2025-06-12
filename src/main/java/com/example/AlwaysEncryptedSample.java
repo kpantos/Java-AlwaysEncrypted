@@ -12,8 +12,10 @@ import java.util.Properties;
 public class AlwaysEncryptedSample {
     public static void main(String[] args) throws Exception {
         
+        System.out.println("Test Azure key vault access");
         testKeyVaultAccess();
         
+        System.out.println("Querying database with Always Encrypted");
         queryDatabase();
     }
 
@@ -60,13 +62,17 @@ public class AlwaysEncryptedSample {
         String keyVaultUrl = env.get("KEYVAULT_URL");
         String secretName = env.get("SECRET_NAME");
 
-        SecretClient client = new SecretClientBuilder()
-                .vaultUrl(keyVaultUrl)
-                .credential(new DefaultAzureCredentialBuilder().build())
-                .buildClient();
-        KeyVaultSecret secret = client.getSecret(secretName);
+        if (keyVaultUrl != null && secretName != null) {
+            System.out.println("Key Vault URL: " + keyVaultUrl);
+            System.out.println("Secret Name: " + secretName);
 
-        System.out.println("Secret Value: " + secret.getValue());
+            SecretClient client = new SecretClientBuilder()
+                    .vaultUrl(keyVaultUrl)
+                    .credential(new DefaultAzureCredentialBuilder().build())
+                    .buildClient();
+            KeyVaultSecret secret = client.getSecret(secretName);
 
+            System.out.println("Secret Value: " + secret.getValue());
+        }
     }
 }

@@ -23,16 +23,8 @@ spec:
                   name: sql-conn-secret
                   key: connection-string
             - name: AZURE_MANAGED_IDENTITY_CLIENT_ID
-              value: c79f5e7a-fefc-4e5e-98f6-3440bd2e9277
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: aks-keyvault-sa
-  annotations:
-    azure.workload.identity/client-id: c79f5e7a-fefc-4e5e-98f6-3440bd2e9277 # Replace with your managed identity client ID
-    azure.workload.identity/tenant-id: f129bc3c-3fb2-4d3b-85c8-839e1a9bd9e2 # Replace with your Azure tenant ID
-    azure.workload.identity/service-account-token-expiration: "3600"
+              value: 0636a8d3-87d1-4d44-8731-c0b07ef7d616
+
 ---
 apiVersion: v1
 kind: Secret
