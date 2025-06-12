@@ -11,11 +11,12 @@ spec:
     metadata:
       labels:
         app: always-encrypted-sample
+        azure.workload.identity/use: "true"
     spec:
       serviceAccountName: aks-keyvault-sa # Ensure this service account is bound to a managed identity with Key Vault access
       containers:
         - name: always-encrypted-sample
-          image: kpantos/com.example.alwaysencrypted:v1
+          image: kpantos/com.example.alwaysencrypted:v5
           env:
             - name: SQL_CONN_STRING
               valueFrom:
@@ -24,11 +25,16 @@ spec:
                   key: connection-string
             - name: AZURE_MANAGED_IDENTITY_CLIENT_ID
               value: 0636a8d3-87d1-4d44-8731-c0b07ef7d616
-
+            - name: AZURE_TENANT_ID
+              value: f129bc3c-3fb2-4d3b-85c8-839e1a9bd9e2
+            # - name : KEYVAULT_URL
+            #   value: https://uapakv.vault.azure.net
+            # - name: SECRET_NAME
+            #   value: testsecret 
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: sql-conn-secret
 stringData:
-  connection-string: "jdbc:sqlserver://UAPSQLServer;database=WideWorldImporters;user=sqltest@UAPSQLServer;password=StrongPassword123!;encrypt=true;"
+  connection-string: "jdbc:sqlserver://UAPSQLServer;database=WideWorldImporters;user=sqltest;password=StrongPassword123!;encrypt=false;"

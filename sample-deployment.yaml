@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: quick-start
+  namespace: default
+  labels:
+    azure.workload.identity/use: "true"
+spec:
+  serviceAccountName: aks-keyvault-sa
+  containers:
+    - image: ghcr.io/azure/azure-workload-identity/msal-go
+      name: oidc
+      env:
+      - name: KEYVAULT_URL
+        value: https://uapakv.vault.azure.net
+      - name: SECRET_NAME
+        value: testsecret
+  nodeSelector:
+    kubernetes.io/os: linux
