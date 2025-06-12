@@ -1,0 +1,38 @@
+# Maven
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA
+*.iml
+.idea/
+out/
+
+# VS Code
+.vscode/
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build
+*.class
+
+# Package
+*.jar
+*.war
+*.ear
+
+# Others
+*.swp
+*~
+
+# Local environment
+.env

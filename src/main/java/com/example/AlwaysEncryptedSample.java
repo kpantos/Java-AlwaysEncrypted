@@ -1,13 +1,24 @@
 package com.example;
 
 import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.security.keyvault.secrets.SecretClient;
+import com.azure.security.keyvault.secrets.SecretClientBuilder;
+import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
 import com.microsoft.sqlserver.jdbc.*;
 import java.sql.*;
+import java.util.Map;
 import java.util.Properties;
 
 public class AlwaysEncryptedSample {
     public static void main(String[] args) throws Exception {
-        // JDBC connection string
+        
+        testKeyVaultAccess();
+        
+        queryDatabase();
+    }
+
+    private static void queryDatabase() throws Exception {
+// JDBC connection string
         // Sample connection string jdbc:sqlserver://<your-sql-server>.database.windows.net:1433;database=<your-database>;encrypt=true;authentication=ActiveDirectoryManagedIdentity;
         // picked from akv using the csi driver
         String connectionUrl = System.getenv("SQL_CONN_STRING");
@@ -41,5 +52,21 @@ public class AlwaysEncryptedSample {
                 System.out.println("SSN" + rs.getString(2));
             }
         }
+    }
+
+    private static void testKeyVaultAccess() throws Exception {
+
+        Map<String, String> env = System.getenv();
+        String keyVaultUrl = env.get("KEYVAULT_URL");
+        String secretName = env.get("SECRET_NAME");
+
+        SecretClient client = new SecretClientBuilder()
+                .vaultUrl(keyVaultUrl)
+                .credential(new DefaultAzureCredentialBuilder().build())
+                .buildClient();
+        KeyVaultSecret secret = client.getSecret(secretName);
+
+        System.out.println("Secret Value: " + secret.getValue());
+
     }
 }
