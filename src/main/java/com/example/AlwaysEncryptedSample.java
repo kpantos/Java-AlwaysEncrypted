@@ -12,20 +12,34 @@ import java.util.Properties;
 public class AlwaysEncryptedSample {
     public static void main(String[] args) throws Exception {
         
-        System.out.println("Test Azure key vault access");
-        testKeyVaultAccess();
+        // System.out.println("Test Azure key vault access");
+        // testKeyVaultAccess();
         
         System.out.println("Querying database with Always Encrypted");
         queryDatabase();
+
+        System.out.println("Waiting indefinitely. Press Ctrl+C to exit.");
+        Thread.currentThread().join();
+    }
+
+    private static String getSqlConnectionStringFromKeyVault() {
+        String keyVaultUrl = System.getenv("KEYVAULT_URL");
+        String secretName = System.getenv("SECRET_NAME");
+        if (keyVaultUrl == null || secretName == null) {
+            throw new RuntimeException("KEYVAULT_URL or SECRET_NAME environment variable not set.");
+        }
+        SecretClient client = new SecretClientBuilder()
+                .vaultUrl(keyVaultUrl)
+                .credential(new DefaultAzureCredentialBuilder().build())
+                .buildClient();
+        KeyVaultSecret secret = client.getSecret(secretName);
+        return secret.getValue();
     }
 
     private static void queryDatabase() throws Exception {
-// JDBC connection string
-        // Sample connection string jdbc:sqlserver://<your-sql-server>.database.windows.net:1433;database=<your-database>;encrypt=true;authentication=ActiveDirectoryManagedIdentity;
-        // picked from akv using the csi driver
-        String connectionUrl = System.getenv("SQL_CONN_STRING");
+        String connectionUrl = getSqlConnectionStringFromKeyVault();
         if (connectionUrl == null) {
-            System.err.println("SQL_CONN_STRING environment variable not set.");
+            System.err.println("SQL connection string not found in Key Vault.");
             System.exit(1);
         }
 
@@ -50,8 +64,7 @@ public class AlwaysEncryptedSample {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM [Sales].Employees;");
             while (rs.next()) {
-                System.out.println("ID: " + rs.getString(1));
-                System.out.println("SSN" + rs.getString(2));
+                System.out.println("ID: " + rs.getString(1) + " SSN: " + rs.getString(2));
             }
         }
     }
