@@ -4,8 +4,8 @@ This sample demonstrates a Java application using SQL Server Always Encrypted wi
 
 ## Prerequisites
 - Azure SQL Database or SQL Server with Always Encrypted enabled
-- Column Master Key (CMK) stored in Azure Key Vault
-- AKS cluster with Workflow Identity enabled
+- Column Masredister Key (CMK) stored in Azure Key Vault
+- AKS cluster with Workload Identity enabled
 - User managed identity with access to Key Vault
 
 ## Configuration
