@@ -1,4 +1,4 @@
-# Sample Java Always Encrypted App with Azure Key Vault and AKS CSI Driver
+# Sample Always Encrypted App with Azure Key Vault and AKS Workload Identities
 
 This sample demonstrates a Java application using SQL Server Always Encrypted with Azure Key Vault as the column master key store. It is designed for containerized deployment in AKS, leveraging the Azure Key Vault for secret management.
 
