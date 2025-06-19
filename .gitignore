@@ -36,3 +36,19 @@ Thumbs.db
 
 # Local environment
 .env
+
+# Dotnet
+bin/
+obj/
+*.user
+*.suo
+*.dbmdl
+*.pdb
+*.nupkg
+.nuget/
+app/publish/
+publish/
+
+# Kubernetes manifests secrets
+*secret*.yaml
+my-app-secret.yaml

@@ -43,7 +43,11 @@ namespace AkvAlwaysEncryptedSample
                         command.CommandText = "SELECT * FROM [Sales].Employees;";
                         using (SqlDataReader sqlDataReader = command.ExecuteReader())
                         {
-                            Console.WriteLine("ID: " + sqlDataReader.GetString(1) + " SSN: " + sqlDataReader.GetString(2));
+                            while (sqlDataReader.Read())
+                            {
+                                // Assuming the first column is an integer ID, the second is a string ID, and the third is a string SSN
+                                Console.WriteLine("ID: " + sqlDataReader.GetInt32(0) + " SSN: " + sqlDataReader.GetString(1));
+                            }
                         }
                     }
                 }

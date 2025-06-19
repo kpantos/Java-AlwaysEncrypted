@@ -1,0 +1,15 @@
+bin/
+obj/
+.vscode/
+.git/
+.gitignore
+Dockerfile
+*.md
+*.user
+*.suo
+*.dbmdl
+*.pdb
+*.nupkg
+.nuget/
+/app/publish/
+publish/

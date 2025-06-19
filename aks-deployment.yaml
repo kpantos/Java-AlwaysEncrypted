@@ -16,13 +16,10 @@ spec:
       serviceAccountName: aks-keyvault-sa # Ensure this service account is bound to a managed identity with Key Vault access
       containers:
         - name: always-encrypted-sample
-          image: kpantos/com.example.alwaysencrypted:v7
+          image: kpantos/alwaysencrypted-net:v4
           env:
-            - name: AZURE_MANAGED_IDENTITY_CLIENT_ID
-              value: 0636a8d3-87d1-4d44-8731-c0b07ef7d616
-            - name: AZURE_TENANT_ID
-              value: f129bc3c-3fb2-4d3b-85c8-839e1a9bd9e2
-            - name: KEYVAULT_URL
-              value: https://uapakv.vault.azure.net
-            - name: SECRET_NAME
-              value: SQLConnection
+            - name: SQL_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: sql-connection-secret
+                  key: sql-connection-string
