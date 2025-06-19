@@ -1,0 +1,54 @@
+# .gitignore for Visual Studio, .NET, and common OS artifacts
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Bb]uilds/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+*.sln.iml
+
+# NuGet
+*.nupkg
+.nuget/
+
+# Logs
+*.log
+
+# Publish results
+publish/
+/app/publish/
+
+# Others
+*.dbmdl
+*.dbproj.schemaview
+*.pdb
+*.cache
+*.zip
+*.vspscc
+*.vssscc
+*.vsp
+*.vsix
+*.vsixmanifest
+*.psess
+*.vspx
+*.vsmdi
+*.testsettings
+*.vsconfig
+
+# Azure Pipelines
+.azure-pipelines/
